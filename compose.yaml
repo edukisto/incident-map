@@ -1,0 +1,51 @@
+services:
+  mysql_service:
+    container_name: project-mysql
+    env_file:
+      - ./.env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    healthcheck:
+      interval: 5s
+      retries: 5
+      start_period: 5m
+      test: ["CMD", "mysqladmin", "ping", "-u", "root", "-p${DB_PASSWORD}"]
+      timeout: 5s
+    image: mysql:8.4-oraclelinux9
+    volumes:
+      - ./db/:/var/lib/mysql/:rw
+      - ./infra/db-init/:/docker-entrypoint-initdb.d/:ro
+  php_service:
+    build: ./php/
+    command: php artisan serve --host=0.0.0.0 --port=8008
+    container_name: project-php
+    depends_on:
+      mysql_service:
+        condition: service_healthy
+    env_file:
+      - ./.env
+    environment:
+      DB_CONNECTION: mysql
+      DB_HOST: mysql_service
+      DB_PORT: 3306
+      DB_DATABASE: laravel
+      DB_USERNAME: root
+      DB_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "8080:8008"
+    user: "1000:1000"
+    volumes:
+      - ./src/laravel/:/srv/laravel/:rw
+    working_dir: /srv/laravel/
+  phpmyadmin_service:
+    container_name: project-phpmyadmin
+    depends_on:
+      mysql_service:
+        condition: service_healthy
+    environment:
+      - PMA_HOST=mysql_service
+      - PMA_PORT=3306
+      - PMA_SSL=1
+    image: phpmyadmin:5-apache
+    ports:
+      - "8081:80"
