@@ -15,6 +15,18 @@ services:
     volumes:
       - ./db/:/var/lib/mysql/:rw
       - ./infra/db-init/:/docker-entrypoint-initdb.d/:ro
+  node_service:
+    command: npm run dev
+    container_name: project-node
+    depends_on:
+      - php_service
+    image: node:24-slim
+    ports:
+      - "5173:5173"
+    user: "1000:1000"
+    volumes:
+      - ./src/laravel/:/srv/laravel/:rw
+    working_dir: /srv/laravel/
   php_service:
     build: ./php/
     command: php artisan serve --host=0.0.0.0 --port=8008

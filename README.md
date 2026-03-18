@@ -28,6 +28,38 @@ docker container run \
   composer create-project --no-interaction laravel/laravel:^12 laravel
 ```
 
+## Установка JavaScript­‑зависимостей (уже выполнено)
+
+### Windows (CMD)
+
+```sh
+docker container run ^
+  --interactive ^
+  --rm ^
+  --tty ^
+  --user "1000:1000" ^
+  --volume="%CD%\src\laravel\:/srv/laravel/" ^
+  --workdir="/srv/laravel/" ^
+  -- ^
+  node:24-slim ^
+  npm install @inertiajs/react@^2.0 react@^18 react-dom@^18 @vitejs/plugin-react@^4.3 maplibre-gl
+```
+
+### Unix­‑подобные ОС
+
+```sh
+docker container run \
+  --interactive \
+  --rm \
+  --tty \
+  --user "1000:1000" \
+  --volume="./src/laravel/:/srv/laravel/" \
+  --workdir="/srv/laravel/" \
+  -- \
+  node:24-slim \
+  npm install @inertiajs/react@^2.0 react@^18 react-dom@^18 @vitejs/plugin-react@^4.3 maplibre-gl
+```
+
 ## Запуск
 
 ```sh
@@ -51,8 +83,13 @@ docker compose up -d
 ```sh
 docker exec -it project-php sh
 composer install
+npm install
 php artisan migrate
 exit
+```
+
+```sh
+docker compose exec node_service npm install
 ```
 
 ## Эксплуатация
