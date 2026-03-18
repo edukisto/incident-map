@@ -5,6 +5,8 @@ namespace Database\Factories;
 use App\Models\Incident;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+use function Illuminate\Support\now;
+
 /**
  * @extends Factory<Incident>
  */
@@ -18,7 +20,7 @@ class IncidentFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'occured_on' => now(),
         ];
     }
 }

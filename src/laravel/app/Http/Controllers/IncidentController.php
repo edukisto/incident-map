@@ -4,16 +4,29 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreIncidentRequest;
 use App\Http\Requests\UpdateIncidentRequest;
+// use App\Http\Resources\IncidentCollection;
 use App\Models\Incident;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class IncidentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $incidents = Incident::all();
+
+        // Это было на паре 14.03.2026.
+        // if ($request->wantsJson()) {
+        //     return new IncidentCollection($incidents);
+        // }
+
+        return Inertia::render('IncidentIndexMapPage', [
+            // См. src/laravel/resources/js/Pages/IncidentIndexMapPage.jsx
+            'incidents' => $incidents,
+        ]);
     }
 
     /**
