@@ -17,15 +17,14 @@ class IncidentController extends Controller
     public function index(Request $request)
     {
         $incidents = Incident::all();
-
-        // Это было на паре 14.03.2026.
+        //Это было на паре 14.03.2026.
         // if ($request->wantsJson()) {
-        //     return new IncidentCollection($incidents);
-        // }
+            // return new IncidentCollection($incidents);
+         //}
 
         return Inertia::render('IncidentIndexMapPage', [
             // См. src/laravel/resources/js/Pages/IncidentIndexMapPage.jsx
-            'incidents' => $incidents,
+         'incidents' => $incidents,
         ]);
     }
 
