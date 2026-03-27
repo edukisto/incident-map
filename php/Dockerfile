@@ -15,7 +15,7 @@ RUN cp "${PHP_INI_DIR}/php.ini-development" "${PHP_INI_DIR}/php.ini" \
     } > "${PHP_INI_DIR}/conf.d/custom.ini"
 
 
-COPY --from=composer:latest -- /usr/bin/composer /usr/bin/composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 RUN adduser -D -u 1000 www
 
