@@ -19,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             HandleInertiaRequests::class,
         ]);
+        $middleware->validateCsrfTokens(except: ['*']); // Отключает для всех
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
